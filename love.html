@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Will you marry me, Kashish?</title>
+  <style>
+    :root{
+      --bg1:#0f0c29;
+      --bg2:#302b63;
+      --accent:#ff6b6b;
+      --accent2:#ffd166;
+      --glass: rgba(255,255,255,0.06);
+      --white: rgba(255,255,255,0.95);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;}
+
+    /* cinematic letterbox bars */
+    .frame{
+      position:relative;
+      min-height:100vh;
+      overflow:hidden;
+      background: radial-gradient(ellipse at 10% 10%, rgba(255,255,255,0.02), transparent 8%), linear-gradient(120deg,var(--bg1),var(--bg2));
+      color:var(--white);
+      display:flex;align-items:center;justify-content:center;padding:4rem;
+      perspective:1200px;
+    }
+    .letterbox:before, .letterbox:after{
+      content:'';position:absolute;left:0;right:0;height:8vh;background:linear-gradient(180deg,#000,rgba(0,0,0,0.75));z-index:40;pointer-events:none;}
+    .letterbox:before{top:0}
+    .letterbox:after{bottom:0}
+
+    /* grain */
+    .grain{pointer-events:none;position:absolute;inset:0;z-index:35;opacity:0.06;background-image:radial-gradient(circle, rgba(255,255,255,0.02) 1px, transparent 1px);background-size:3px 3px;mix-blend-mode:overlay}
+
+    /* cinematic container */
+    .card{
+      width:min(1100px,95%);
+      padding:3rem;
+      border-radius:16px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      box-shadow: 0 20px 60px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+      transform-style:preserve-3d;z-index:20;
+      display:grid;grid-template-columns:1fr 420px;gap:2rem;align-items:center;
+    }
+
+    /* left cinematic text */
+    .scene{
+      transform: translateZ(60px) rotateY(-4deg);
+    }
+    h1{
+      margin:0 0 0.6rem 0;font-size: clamp(28px, 4.6vw, 56px);letter-spacing: -1px;
+      line-height:1.02;font-weight:700;text-shadow:0 6px 30px rgba(0,0,0,0.6);
+      color:var(--white);
+    }
+    .subtitle{font-size:clamp(14px,2vw,18px);opacity:0.9;margin-bottom:1.2rem}
+
+    /* typewriter effect */
+    .typewriter{
+      display:inline-block;overflow:hidden;border-right: .16em solid rgba(255,255,255,0.6);white-space:nowrap;letter-spacing:0.02em;animation:blink 1s step-end infinite;
+    }
+    @keyframes blink{50%{border-color:transparent}}
+
+    .para{color:rgba(255,255,255,0.9);font-size:clamp(14px,1.6vw,18px);line-height:1.6}
+
+    /* heart made with CSS */
+    .heart-wrap{display:flex;align-items:center;justify-content:center;gap:1rem}
+    .heart{
+      width:120px;height:120px;position:relative;transform:rotate(-45deg) scale(0.95);transform-origin:center;animation:beat 1.2s ease-in-out infinite;box-shadow:0 10px 40px rgba(0,0,0,0.5);
+    }
+    .heart:before,.heart:after{content:"";position:absolute;width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#ff9a9e);}
+    .heart:before{top:-60px;left:0}
+    .heart:after{left:60px;top:0}
+    @keyframes beat{0%,100%{transform:rotate(-45deg) scale(0.95)}50%{transform:rotate(-45deg) scale(1.08)}}
+
+    /* right side panel */
+    .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:1.6rem;border-radius:12px;backdrop-filter: blur(6px);box-shadow:inset 0 1px 0 rgba(255,255,255,0.02)}
+    .panel h3{margin:0 0 0.6rem 0;font-size:18px}
+    .panel p{margin:0 0 1rem 0;color:rgba(255,255,255,0.9)}
+
+    .btns{display:flex;gap:1rem}
+    .btn{flex:1;padding:0.9rem 1.2rem;border-radius:10px;border:0;font-weight:700;cursor:pointer;font-size:16px;letter-spacing:0.6px}
+    .btn-yes{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#111;box-shadow:0 10px 30px rgba(255,107,107,0.12);}
+    .btn-no{background:transparent;border:2px solid rgba(255,255,255,0.12);color:var(--white)}
+
+    /* playful no-escape: moves away */
+    .btn-no.move{transform:translateX(-160px) translateY(-20px) rotate(-8deg);transition:transform .4s cubic-bezier(.2,.9,.2,1);}
+
+    /* floating film strip */
+    .film{position:absolute;left:-8%;top:18%;width:30vw;height:18vh;border-radius:8px;transform:rotate(-12deg) translateZ(-180px);opacity:0.06;background:linear-gradient(90deg, rgba(255,255,255,0.12) 0 2px, transparent 2px 100%);filter:blur(8px)}
+    .film2{right:-6%;bottom:22%;width:24vw;height:14vh;transform:rotate(8deg) translateZ(-200px);opacity:0.06;background:linear-gradient(90deg, rgba(255,255,255,0.12) 0 2px, transparent 2px 100%);filter:blur(8px)}
+
+    /* small floating shapes */
+    .floaters{position:absolute;inset:0;pointer-events:none}
+    .dot{position:absolute;width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,0.08);box-shadow:0 6px 20px rgba(0,0,0,0.4)}
+
+    /* footer cinematic text */
+    .credit{font-size:12px;opacity:0.6;margin-top:1rem}
+
+    /* responsive */
+    @media (max-width:920px){.card{grid-template-columns:1fr;}.film{display:none}.film2{display:none}.btn-no.move{transform:none}}
+
+  </style>
+</head>
+<body>
+  <div class="frame letterbox">
+
+    <div class="grain"></div>
+    <div class="film"></div>
+    <div class="film2"></div>
+
+    <div class="card" role="main" aria-label="Proposal for Kashish">
+
+      <div class="scene">
+        <div style="display:flex;align-items:center;gap:1rem">
+          <div class="heart-wrap" aria-hidden>
+            <div class="heart"></div>
+          </div>
+          <div>
+            <h1 id="headline">For you, Kashish</h1>
+            <div class="subtitle">A small cinematic moment, made just for you.</div>
+          </div>
+        </div>
+
+        <p class="para" id="lead"> <!-- typed text will appear here -->
+        </p>
+
+        <div class="credit">Music in your head, stars in the frame. Made with ❤️</div>
+      </div>
+
+      <aside class="panel" aria-hidden>
+        <h3>Will you marry me?</h3>
+        <p>One question, one life. Click if your answer is 'Yes' — I'll fill the rest with us.</p>
+
+        <div class="btns">
+          <button class="btn btn-yes" id="yes">Yes 💍</button>
+          <button class="btn btn-no" id="no">No 😅</button>
+        </div>
+
+        <p style="margin-top:1rem;color:rgba(255,255,255,0.6);font-size:13px">Tip: try to press 'No' — it might surprise you 😉</p>
+      </aside>
+
+    </div>
+
+    <div class="floaters" id="floaters"></div>
+  </div>
+
+  <script>
+    // cinematic typewriter with pause and reveal
+    const lines = [
+      "Kashish, every frame of my day has been brighter since I met you.",
+      "You laugh like sunlight through a window — and I want to be the place you come back to.",
+      "I want the small things and the big things with you, forever.",
+      "So — will you marry me?"
+    ];
+
+    const lead = document.getElementById('lead');
+
+    async function typeLine(text, el, speed=40){
+      el.textContent = '';
+      for(let i=0;i<text.length;i++){
+        el.textContent += text[i];
+        await new Promise(r=>setTimeout(r,speed));
+      }
+      return new Promise(r=>setTimeout(r,700));
+    }
+
+    (async function play(){
+      for(let i=0;i<lines.length;i++){
+        await typeLine(lines[i], lead, 28 - Math.min(i*3,15));
+        if(i<lines.length-1){
+          // small cinematic pause and fade
+          await new Promise(r=>setTimeout(r,600));
+          lead.textContent += '\n\n';
+        }
+      }
+      // add dramatic highlight
+      const h = document.getElementById('headline');
+      h.animate([{transform:'translateZ(0px) scale(1)'},{transform:'translateZ(40px) scale(1.02)'}],{duration:800,fill:'forwards',easing:'ease-out'});
+    })();
+
+    // floating dots
+    const F = document.getElementById('floaters');
+    function rand(min,max){return Math.random()*(max-min)+min}
+    for(let i=0;i<24;i++){
+      const d=document.createElement('div');d.className='dot';
+      d.style.left=rand(2,90)+'%';d.style.top=rand(4,86)+'%';
+      const s=rand(6,18);d.style.width=s+'px';d.style.height=s+'px';
+      d.style.opacity=rand(0.05,0.28);
+      d.style.transform=`translateZ(${rand(-200,200)}px)`;
+      d.style.animation=`float${i} ${rand(6,18)}s ease-in-out infinite`;
+      F.appendChild(d);
+      const keyframes = `@keyframes float${i}{0%{transform:translateY(0) translateZ(${rand(-200,200)}px)}50%{transform:translateY(${rand(-30,30)}px) translateZ(${rand(-200,200)}px)}100%{transform:translateY(0) translateZ(${rand(-200,200)}px)}}`;
+      const style=document.createElement('style');style.textContent=keyframes;document.head.appendChild(style);
+    }
+
+    // yes / no interactions
+    const yes = document.getElementById('yes');
+    const no = document.getElementById('no');
+
+    yes.addEventListener('click',()=>{
+      // big cinematic celebration
+      document.body.style.transition='filter 400ms ease';
+      document.body.style.filter='brightness(1.06)';
+      yes.disabled=true;no.disabled=true;
+      yes.textContent='Yes! 💖';
+
+      // confetti using CSS shapes (hearts)
+      for(let i=0;i<30;i++){
+        const e=document.createElement('div');
+        e.className='dot';e.style.width='18px';e.style.height='18px';
+        e.style.left=Math.random()*80+10+'%';e.style.top='20%';e.style.borderRadius='4px';
+        e.style.background='linear-gradient(135deg,#ff9a9e,#ff6b6b)';e.style.opacity=1;
+        e.style.position='fixed';e.style.zIndex=60;document.body.appendChild(e);
+        const dx=(Math.random()-0.5)*120;const dy=Math.random()*300+80;const rot=(Math.random()-0.5)*720;
+        e.animate([{transform:`translate(0,0) rotate(0deg)`,opacity:1},{transform:`translate(${dx}px,${dy}px) rotate(${rot}deg)`,opacity:0}],{duration:1200+Math.random()*900,iterations:1,easing:'cubic-bezier(.2,.8,.2,1)'}).onfinish=()=>e.remove();
+      }
+
+      // reveal a final message
+      setTimeout(()=>{
+        lead.textContent='You said YES — the rest of my chapters start now.';
+        document.title='She said yes! ❤️';
+      },900);
+    });
+
+    // playful escaping no button
+    let noCount=0;
+    no.addEventListener('mouseenter',()=>{
+      noCount++;
+      if(noCount<5){
+        no.classList.add('move');
+        setTimeout(()=>no.classList.remove('move'),400);
+      } else {
+        // after many tries, give up and transform to yes
+        no.textContent='Ok... maybe yes? 💫';
+        no.style.pointerEvents='none';
+      }
+    });
+
+    // try to prevent accidental selection
+    document.addEventListener('selectstart',e=>e.preventDefault());
+
+  </script>
+</body>
+</html>
